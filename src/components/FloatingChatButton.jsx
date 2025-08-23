@@ -1,25 +1,27 @@
 import React from "react";
+import { Fab } from "@mui/material";
+import { Chat } from "@mui/icons-material";
 
-export const FloatingChatButton = () => {
+export const FloatingChatButton = ({ onClick }) => {
   return (
-    <button
-      onClick={() => setIsOpen(!isOpen)}
-      style={{
+    <Fab
+      onClick={onClick}
+      sx={{
         position: "fixed",
-        bottom: "20px",
-        right: "20px",
-        borderRadius: "50%",
-        width: "60px",
-        height: "60px",
-        backgroundColor: "#007bff",
+        bottom: 30,
+        right: 30,
+        backgroundColor: "#4285f4",
         color: "white",
-        border: "none",
-        cursor: "pointer",
-        fontSize: "18px",
-        boxShadow: "0px 4px 8px rgba(0,0,0,0.2)",
+        width: 60,
+        height: 60,
+        "&:hover": {
+          backgroundColor: "#3367d6",
+        },
+        transition: "all 0.3s ease-in-out",
+        zIndex: 1000,
       }}
     >
-      💬
-    </button>
+      <Chat sx={{ fontSize: 28 }} />
+    </Fab>
   );
 };
