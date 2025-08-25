@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   Box,
   Paper,
@@ -26,6 +26,16 @@ export const ChatBox = ({ onClose }) => {
       timestamp: "17:55",
     },
   ]);
+  
+  const messagesEndRef = useRef(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   const handleSendMessage = () => {
     if (message.trim()) {
@@ -225,6 +235,7 @@ export const ChatBox = ({ onClose }) => {
               </Box>
             </Box>
           ))}
+          <div ref={messagesEndRef} />
         </Box>
       )}
 
