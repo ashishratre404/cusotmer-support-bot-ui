@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ENDPOINTS } from "./constant";
+import { ENDPOINTS } from "./constant.js";
 
 export const healthCheck = async () => {
   const response = await axios.get(ENDPOINTS.HEALTH_CHECK);
