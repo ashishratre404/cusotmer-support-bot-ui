@@ -18,7 +18,7 @@ export const FloatingChatButton = ({ onClick }) => {
           backgroundColor: "#3367d6",
         },
         transition: "all 0.3s ease-in-out",
-        zIndex: 1000,
+        zIndex: 2147483647,
       }}
     >
       <Chat sx={{ fontSize: 28 }} />

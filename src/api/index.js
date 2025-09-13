@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ENDPOINTS } from "./constant";
+import { ENDPOINTS } from "./constant.js";
 
 export const healthCheck = async () => {
   const response = await axios.get(ENDPOINTS.HEALTH_CHECK);
@@ -13,7 +13,7 @@ export const ingestDocs = async (docs) => {
 
 export const query = async (queryText) => {
   try {
-    const response = await axios.post(ENDPOINTS.QUERY, { query: queryText });
+    const response = await axios.post(ENDPOINTS.QUERY, queryText);
     return response.data;
   } catch (err) {
     console.error("Query API failed:", err);

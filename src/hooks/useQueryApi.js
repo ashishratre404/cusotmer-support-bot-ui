@@ -1,17 +1,37 @@
 import { useState } from "react";
-import { query } from "../api";
+import { query } from "../api/index.js";
 
 export const useQueryApi = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState([
+    {
+      id: 1,
+      text: "Hi! I'm here to help you. How can I assist you today?",
+      sender: "bot",
+      timestamp: new Date().toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+    },
+  ]);
 
   const sendQuery = async (message) => {
     setLoading(true);
     setError(null);
 
+    const payload = {
+      tenant_id: "google",
+      query: message,
+      k: 2,
+    };
+
     try {
-      const response = await query(message);
-      return response;
+      const response = await query(payload);
+      const ans = response?.answer || "Sorry, I couldn't answer that question.";
+      handleAddMessage(ans, "bot");
+      return ans;
     } catch (err) {
       setError(err);
       throw err;
@@ -20,5 +40,36 @@ export const useQueryApi = () => {
     }
   };
 
-  return { sendQuery, loading, error };
+  const handleSendMessage = (msg = "", sender = "bot") => {
+    if (msg.trim()) {
+      handleAddMessage(msg, sender);
+      sendQuery(msg);
+    }
+    setMessage("");
+  };
+
+  const handleAddMessage = (msg = "", sender = "bot") => {
+    if (msg.trim()) {
+      const newMsg = {
+        id: Date.now() + 1,
+        text: msg || "Thanks for your message! I'll help you with that.",
+        sender: sender,
+        timestamp: new Date().toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+      };
+      setMessages((prev) => [...prev, newMsg]);
+    }
+  };
+
+  return {
+    sendQuery,
+    loading,
+    error,
+    messages,
+    handleSendMessage,
+    message,
+    setMessage,
+  };
 };

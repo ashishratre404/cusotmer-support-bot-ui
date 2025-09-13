@@ -14,19 +14,12 @@ import {
   Support as SupportIcon,
   CloseFullscreen as MinimizeIcon,
 } from "@mui/icons-material";
+import { useQueryApi } from "../hooks/useQueryApi";
 
 export const ChatBox = ({ onClose }) => {
   const [isMinimized, setIsMinimized] = useState(false);
-  const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState([
-    {
-      id: 1,
-      text: "Hi! I'm here to help you. How can I assist you today?",
-      sender: "bot",
-      timestamp: "17:55",
-    },
-  ]);
-  
+  const { messages, handleSendMessage, message, setMessage } = useQueryApi();
+
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -37,40 +30,10 @@ export const ChatBox = ({ onClose }) => {
     scrollToBottom();
   }, [messages]);
 
-  const handleSendMessage = () => {
-    if (message.trim()) {
-      const newMessage = {
-        id: Date.now(),
-        text: message,
-        sender: "user",
-        timestamp: new Date().toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        }),
-      };
-      setMessages([...messages, newMessage]);
-      setMessage("");
-
-      // Simulate bot response
-      setTimeout(() => {
-        const botResponse = {
-          id: Date.now() + 1,
-          text: "Thanks for your message! I'll help you with that.",
-          sender: "bot",
-          timestamp: new Date().toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-          }),
-        };
-        setMessages((prev) => [...prev, botResponse]);
-      }, 1000);
-    }
-  };
-
   const handleKeyPress = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
-      handleSendMessage();
+      handleSendMessage(message, "user");
     }
   };
 
@@ -267,7 +230,7 @@ export const ChatBox = ({ onClose }) => {
               }}
             />
             <IconButton
-              onClick={handleSendMessage}
+              onClick={() => handleSendMessage(message, "user")}
               disabled={!message.trim()}
               sx={{
                 backgroundColor: "#4285f4",
