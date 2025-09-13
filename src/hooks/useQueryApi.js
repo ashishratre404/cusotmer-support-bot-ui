@@ -21,10 +21,17 @@ export const useQueryApi = () => {
     setLoading(true);
     setError(null);
 
+    const payload = {
+      tenant_id: "google",
+      query: message,
+      k: 2,
+    };
+
     try {
-      const response = await query(message);
-      handleAddMessage(response, "bot");
-      return response;
+      const response = await query(payload);
+      const ans = response?.answer || "Sorry, I couldn't answer that question.";
+      handleAddMessage(ans, "bot");
+      return ans;
     } catch (err) {
       setError(err);
       throw err;
